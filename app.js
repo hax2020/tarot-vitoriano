@@ -508,6 +508,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const stateDiv = document.createElement("div");
     stateDiv.className = "card-state";
+
+    const visualId = slotData.isInverted
+      ? slotData.idBase + 78
+      : slotData.idBase;
+
+    stateDiv.textContent = `(${visualId})`;
+    
+    
+    stateDiv.className = "card-state";
     stateDiv.textContent = slotData.isInverted ? "Posição Invertida" : "Posição Normal";
 
     const descDiv = document.createElement("div");
