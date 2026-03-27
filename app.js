@@ -73,6 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function trimSlotsByArete() {
     const arete = getArete();
+
     for (let i = arete; i < MAX_SLOTS; i++) {
       cardSlots[i] = null;
     }
@@ -82,10 +83,43 @@ document.addEventListener("DOMContentLoaded", () => {
     const savedPlayer = localStorage.getItem("tarot_playerName");
     const savedChar = localStorage.getItem("tarot_charName");
     const savedArete = localStorage.getItem("tarot_areteValue");
+    const savedSlots = localStorage.getItem("tarot_cardSlots");
 
     if (savedPlayer !== null) playerNameInput.value = savedPlayer;
     if (savedChar !== null) charNameInput.value = savedChar;
     if (savedArete !== null) areteValueInput.value = savedArete;
+
+    if (savedSlots) {
+      try {
+        const parsedSlots = JSON.parse(savedSlots);
+
+        if (Array.isArray(parsedSlots)) {
+          cardSlots = parsedSlots.slice(0, MAX_SLOTS).map((slot) => {
+            if (
+              slot &&
+              typeof slot.idBase === "number" &&
+              slot.idBase >= 1 &&
+              slot.idBase <= 78 &&
+              typeof slot.isInverted === "boolean"
+            ) {
+              return {
+                idBase: slot.idBase,
+                isInverted: slot.isInverted
+              };
+            }
+
+            return null;
+          });
+
+          while (cardSlots.length < MAX_SLOTS) {
+            cardSlots.push(null);
+          }
+        }
+      } catch (error) {
+        console.warn("Falha ao carregar leitura salva:", error);
+        cardSlots = Array(MAX_SLOTS).fill(null);
+      }
+    }
 
     validateArete();
     trimSlotsByArete();
@@ -95,6 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("tarot_playerName", playerNameInput.value.trim());
     localStorage.setItem("tarot_charName", charNameInput.value.trim());
     localStorage.setItem("tarot_areteValue", String(getArete()));
+    localStorage.setItem("tarot_cardSlots", JSON.stringify(cardSlots));
   }
 
   function showFeedback(message) {
@@ -164,12 +199,14 @@ document.addEventListener("DOMContentLoaded", () => {
       cardSlots[i] = null;
     }
 
+    saveToLocalStorage();
     showFeedback("Leitura revelada sob o véu do tempo.");
     renderBoard();
   }
 
   function limparCartas() {
     cardSlots = Array(MAX_SLOTS).fill(null);
+    saveToLocalStorage();
     showFeedback("Lâminas recolhidas ao baralho.");
     renderBoard();
   }
@@ -197,6 +234,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     cardSlots[slotIndex] = { idBase, isInverted };
+    saveToLocalStorage();
     showFeedback(`Lâmina ${numero} inserida na posição ${slotIndex + 1}.`);
     renderBoard();
   }
@@ -214,6 +252,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     cardSlots[slotIndex] = carta;
+    saveToLocalStorage();
     showFeedback(`Nova lâmina sorteada para a posição ${slotIndex + 1}.`);
     renderBoard();
   }
@@ -223,6 +262,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (slotIndex >= arete) return;
 
     cardSlots[slotIndex] = null;
+    saveToLocalStorage();
     showFeedback(`Posição ${slotIndex + 1} esvaziada.`);
     renderBoard();
   }
