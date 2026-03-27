@@ -110,17 +110,37 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 3200);
   }
 
-  function getRandomIdBase() {
-    return Math.floor(Math.random() * 78) + 1;
-  }
-
   function getRandomInverted() {
     return Math.random() < 0.5;
   }
 
-  function sortearCartaVinculada() {
+  function getUsedBaseIds(excludeSlotIndex = null) {
+    return cardSlots
+      .map((slot, index) => {
+        if (!slot) return null;
+        if (excludeSlotIndex !== null && index === excludeSlotIndex) return null;
+        return slot.idBase;
+      })
+      .filter((id) => id !== null);
+  }
+
+  function sortearCartaVinculada(excludedBaseIds = []) {
+    const disponiveis = [];
+
+    for (let i = 1; i <= 78; i++) {
+      if (!excludedBaseIds.includes(i)) {
+        disponiveis.push(i);
+      }
+    }
+
+    if (disponiveis.length === 0) {
+      return null;
+    }
+
+    const idBase = disponiveis[Math.floor(Math.random() * disponiveis.length)];
+
     return {
-      idBase: getRandomIdBase(),
+      idBase,
       isInverted: getRandomInverted()
     };
   }
@@ -131,9 +151,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function sortearTodasAsCartas() {
     const arete = getArete();
+    const usadas = [];
 
     for (let i = 0; i < arete; i++) {
-      cardSlots[i] = sortearCartaVinculada();
+      const carta = sortearCartaVinculada(usadas);
+
+      if (carta) {
+        cardSlots[i] = carta;
+        usadas.push(carta.idBase);
+      } else {
+        cardSlots[i] = null;
+      }
     }
 
     for (let i = arete; i < MAX_SLOTS; i++) {
@@ -162,6 +190,16 @@ document.addEventListener("DOMContentLoaded", () => {
       isInverted = true;
     }
 
+    const duplicada = cardSlots.some((slot, index) => {
+      if (!slot || index === slotIndex) return false;
+      return slot.idBase === idBase;
+    });
+
+    if (duplicada) {
+      showFeedback("Essa lâmina já está presente na leitura.");
+      return;
+    }
+
     cardSlots[slotIndex] = { idBase, isInverted };
     showFeedback(`Lâmina ${numero} inserida na posição ${slotIndex + 1}.`);
     renderBoard();
@@ -171,7 +209,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const arete = getArete();
     if (slotIndex >= arete) return;
 
-    cardSlots[slotIndex] = sortearCartaVinculada();
+    const usadas = getUsedBaseIds(slotIndex);
+    const carta = sortearCartaVinculada(usadas);
+
+    if (!carta) {
+      showFeedback("Não há mais lâminas disponíveis para esta leitura.");
+      return;
+    }
+
+    cardSlots[slotIndex] = carta;
     showFeedback(`Nova lâmina sorteada para a posição ${slotIndex + 1}.`);
     renderBoard();
   }
