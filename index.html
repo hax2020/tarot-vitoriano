@@ -24,33 +24,24 @@
       <div class="divider-ornament" aria-hidden="true"></div>
     </header>
 
-    <section class="controls-panel" aria-label="Controles principais">
-      <div class="inputs-row">
-        <div class="input-group">
-          <label for="playerName">Jogador</label>
-          <input type="text" id="playerName" placeholder="Nome do Jogador" />
+    <section class="table-panel" aria-label="Controles da mesa">
+      <div class="table-top-row">
+        <div>
+          <h2 class="section-title">Mesa de Leituras</h2>
+          <p class="section-subtitle">Configure de 1 a 5 jogadores, cada um com sua própria leitura.</p>
         </div>
 
-        <div class="input-group">
-          <label for="charName">Personagem</label>
-          <input type="text" id="charName" placeholder="Nome do Personagem" />
-        </div>
-
-        <div class="input-group input-group-small">
-          <label for="areteValue">Areté (1–5)</label>
-          <input type="number" id="areteValue" min="1" max="5" value="3" />
+        <div class="table-actions">
+          <button id="btnAddPlayer" class="btn-primary" type="button">Adicionar Jogador</button>
+          <button id="btnRemovePlayer" class="btn-secondary" type="button">Remover Último</button>
+          <button id="btnClearTable" class="btn-secondary" type="button">Limpar Mesa</button>
         </div>
       </div>
 
-      <div class="actions-row">
-        <button id="btnDrawAll" class="btn-primary" type="button">Sortear Cartas</button>
-        <button id="btnClearAll" class="btn-secondary" type="button">Limpar Tudo</button>
-      </div>
-
-      <div class="action-feedback" id="actionFeedback" aria-live="polite"></div>
+      <div class="table-feedback" id="tableFeedback" aria-live="polite"></div>
     </section>
 
-    <main class="cards-board" id="cardsBoard" aria-label="Leitura de cartas"></main>
+    <main id="playersBoard" class="players-board" aria-label="Leituras dos jogadores"></main>
 
     <footer class="victorian-footer">
       <p>Gabinete de Leituras &middot; MDCCCL</p>
