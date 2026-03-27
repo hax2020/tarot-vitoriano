@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oráculo Vitoriano</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lora:ital,wght@0,400;0,500;1,400&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="vintage-overlay" aria-hidden="true"></div>
+
+  <div class="app-container">
+    <header class="victorian-header">
+      <p class="eyebrow">Sociedade Hermética</p>
+      <h1 class="main-title">Oráculo Vitoriano</h1>
+      <div class="divider-ornament" aria-hidden="true"></div>
+    </header>
+
+    <section class="controls-panel" aria-label="Controles principais">
+      <div class="inputs-row">
+        <div class="input-group">
+          <label for="playerName">Jogador</label>
+          <input type="text" id="playerName" placeholder="Nome do Jogador" />
+        </div>
+
+        <div class="input-group">
+          <label for="charName">Personagem</label>
+          <input type="text" id="charName" placeholder="Nome do Personagem" />
+        </div>
+
+        <div class="input-group input-group-small">
+          <label for="areteValue">Areté (1–5)</label>
+          <input type="number" id="areteValue" min="1" max="5" value="3" />
+        </div>
+      </div>
+
+      <div class="actions-row">
+        <button id="btnDrawAll" class="btn-primary" type="button">Sortear Cartas</button>
+        <button id="btnClearAll" class="btn-secondary" type="button">Limpar Tudo</button>
+      </div>
+
+      <div class="action-feedback" id="actionFeedback" aria-live="polite"></div>
+    </section>
+
+    <main class="cards-board" id="cardsBoard" aria-label="Leitura de cartas"></main>
+
+    <footer class="victorian-footer">
+      <p>Gabinete de Leituras &middot; MDCCCL</p>
+    </footer>
+  </div>
+
+  <div id="manualModal" class="modal-overlay hidden" aria-hidden="true">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="manualModalTitle">
+      <h2 id="manualModalTitle">Inserir Lâmina</h2>
+      <p>Insira um número de <strong>1 a 156</strong>.<br />1–78 = normal, 79–156 = invertida.</p>
+
+      <input type="number" id="manualCardId" min="1" max="156" value="1" />
+
+      <div class="modal-actions">
+        <button id="btnConfirmManual" class="btn-primary" type="button">Confirmar</button>
+        <button id="btnCancelManual" class="btn-secondary" type="button">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
