@@ -145,10 +145,6 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  function getFullVisualId(slotData) {
-    return slotData.isInverted ? slotData.idBase + 78 : slotData.idBase;
-  }
-
   function sortearTodasAsCartas() {
     const arete = getArete();
     const usadas = [];
@@ -359,17 +355,12 @@ document.addEventListener("DOMContentLoaded", () => {
     stateDiv.className = "card-state";
     stateDiv.textContent = slotData.isInverted ? "Posição Invertida" : "Posição Normal";
 
-    const idDiv = document.createElement("div");
-    idDiv.className = "card-id";
-    idDiv.textContent = `ID visual: ${getFullVisualId(slotData)} · Base: ${slotData.idBase}`;
-
     const descDiv = document.createElement("div");
     descDiv.className = "card-desc";
     descDiv.textContent = slotData.isInverted ? cardRef.textoInvertido : cardRef.texto;
 
     infoDiv.appendChild(nameDiv);
     infoDiv.appendChild(stateDiv);
-    infoDiv.appendChild(idDiv);
     infoDiv.appendChild(descDiv);
     slotEl.appendChild(infoDiv);
 
