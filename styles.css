@@ -346,6 +346,7 @@ button:hover {
   font-size: 0.92rem;
   line-height: 1.45;
   min-height: 76px;
+  white-space: pre-line;
 }
 
 .slot-actions {
